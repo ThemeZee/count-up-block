@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * React hook that is used to mark the block wrapper element.
  * It provides all the necessary props like the class name.
  *
@@ -18,8 +23,11 @@ import { RichText, useBlockProps } from '@wordpress/block-editor';
  * @return {WPElement} Element to render.
  */
 export default function save( { attributes } ) {
-	const { content } = attributes;
-	const blockProps = useBlockProps.save();
+	const { align, content } = attributes;
+	const className = classnames( {
+		[ `has-text-align-${ align }` ]: align,
+	} );
+	const blockProps = useBlockProps.save( { className } );
 
 	return (
 		<div { ...blockProps }>

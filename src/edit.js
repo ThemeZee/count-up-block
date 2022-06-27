@@ -1,9 +1,9 @@
 /**
  * External dependencies
  */
- import classnames from 'classnames';
- 
- /**
+import classnames from 'classnames';
+
+/**
  * WordPress components that create the necessary UI elements for the block
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-components/
@@ -57,18 +57,29 @@ export default function Edit( {
 	} );
 
 	return (
-		<RichText
-			identifier="content"
-			tagName="div"
-			{ ...blockProps }
-			value={ content }
-			onChange={ ( newContent ) =>
-				setAttributes( { content: newContent } )
-			}
-			onMerge={ mergeBlocks }
-			onReplace={ onReplace }
-			onRemove={ onRemove }
-			placeholder={ placeholder }
-		/>
+		<>
+			<BlockControls group="block">
+				<AlignmentControl
+					value={ align }
+					onChange={ ( newAlign ) =>
+						setAttributes( { align: newAlign } )
+					}
+				/>
+			</BlockControls>
+
+			<RichText
+				identifier="content"
+				tagName="div"
+				{ ...blockProps }
+				value={ content }
+				onChange={ ( newContent ) =>
+					setAttributes( { content: newContent } )
+				}
+				onMerge={ mergeBlocks }
+				onReplace={ onReplace }
+				onRemove={ onRemove }
+				placeholder={ placeholder }
+			/>
+		</>
 	);
 }
