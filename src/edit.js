@@ -1,9 +1,18 @@
 /**
+ * External dependencies
+ */
+ import classnames from 'classnames';
+ 
+ /**
  * WordPress components that create the necessary UI elements for the block
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-components/
  */
-import { TextControl } from '@wordpress/components';
+import {
+	ToolbarDropdownMenu,
+	ToggleControl,
+	__experimentalToolsPanelItem as ToolsPanelItem,
+} from '@wordpress/components';
 
 /**
  * React hook that is used to mark the block wrapper element.
@@ -11,7 +20,14 @@ import { TextControl } from '@wordpress/components';
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-block-editor/#useBlockProps
  */
-import { useBlockProps } from '@wordpress/block-editor';
+import {
+	AlignmentControl,
+	BlockControls,
+	InspectorControls,
+	RichText,
+	useBlockProps,
+	useSetting,
+} from '@wordpress/block-editor';
 
 /**
  * The edit function describes the structure of your block in the context of the
@@ -25,14 +41,34 @@ import { useBlockProps } from '@wordpress/block-editor';
  *
  * @return {WPElement} Element to render.
  */
-export default function Edit( { attributes, setAttributes } ) {
-	const blockProps = useBlockProps();
+export default function Edit( { 
+	attributes,
+	mergeBlocks,
+	onReplace,
+	onRemove,
+	setAttributes,
+	clientId,
+} ) {
+	const { align, content, placeholder } = attributes;
+	const blockProps = useBlockProps( {
+		className: classnames( {
+			[ `has-text-align-${ align }` ]: align,
+		} ),
+	} );
+
 	return (
-		<div { ...blockProps }>
-			<TextControl
-				value={ attributes.message }
-				onChange={ ( val ) => setAttributes( { message: val } ) }
-			/>
-		</div>
+		<RichText
+			identifier="content"
+			tagName="div"
+			{ ...blockProps }
+			value={ content }
+			onChange={ ( newContent ) =>
+				setAttributes( { content: newContent } )
+			}
+			onMerge={ mergeBlocks }
+			onReplace={ onReplace }
+			onRemove={ onRemove }
+			placeholder={ placeholder }
+		/>
 	);
 }
