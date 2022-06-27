@@ -7,14 +7,8 @@
  *
  * Replace them with your own styles or remove the file completely.
  */
-@font-face {
-  font-family: Gilbert;
-  src: url(fonts/gilbert-color.02d3d364.otf);
-  font-weight: 700;
-}
 .wp-block-themezee-count-up-block {
-  font-family: Gilbert, sans-serif;
-  font-size: 64px;
+  font-size: 48px;
 }
 
 /*# sourceMappingURL=style-index.css.map*/
