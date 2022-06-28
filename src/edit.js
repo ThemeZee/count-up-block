@@ -49,10 +49,10 @@ export default function Edit( {
 	setAttributes,
 	clientId,
 } ) {
-	const { align, content, placeholder } = attributes;
+	const { textAlign, content, placeholder } = attributes;
 	const blockProps = useBlockProps( {
 		className: classnames( {
-			[ `has-text-align-${ align }` ]: align,
+			[ `has-text-align-${ textAlign }` ]: textAlign,
 		} ),
 	} );
 
@@ -60,9 +60,9 @@ export default function Edit( {
 		<>
 			<BlockControls group="block">
 				<AlignmentControl
-					value={ align }
+					value={ textAlign }
 					onChange={ ( newAlign ) =>
-						setAttributes( { align: newAlign } )
+						setAttributes( { textAlign: newAlign } )
 					}
 				/>
 			</BlockControls>

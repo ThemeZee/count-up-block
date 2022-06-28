@@ -9,5 +9,8 @@
 .wp-block-themezee-count-up-block input[type=text] {
   font-size: 48px;
 }
+.wp-block-themezee-count-up-block.has-background {
+  padding: 8px 16px;
+}
 
 /*# sourceMappingURL=index.css.map*/
