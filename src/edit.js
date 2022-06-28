@@ -4,6 +4,11 @@
 import classnames from 'classnames';
 
 /**
+ * WordPress dependencies
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * WordPress components that create the necessary UI elements for the block
  *
  * @see https://developer.wordpress.org/block-editor/packages/packages-components/
@@ -11,7 +16,9 @@ import classnames from 'classnames';
 import {
 	ToolbarDropdownMenu,
 	ToggleControl,
+	PanelBody,
 	__experimentalToolsPanelItem as ToolsPanelItem,
+	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
 
 /**
@@ -47,9 +54,8 @@ export default function Edit( {
 	onReplace,
 	onRemove,
 	setAttributes,
-	clientId,
 } ) {
-	const { textAlign, content, placeholder } = attributes;
+	const { textAlign, content, placeholder, startNumber, endNumber } = attributes;
 	const blockProps = useBlockProps( {
 		className: classnames( {
 			[ `has-text-align-${ textAlign }` ]: textAlign,
@@ -66,6 +72,28 @@ export default function Edit( {
 					}
 				/>
 			</BlockControls>
+
+			<InspectorControls>
+				<PanelBody title={ __( 'Counter settings' ) }>
+
+					<NumberControl
+						label={ __( 'Start number' ) }
+						onChange={ ( newStartNumber ) =>
+							setAttributes( { startNumber: newStartNumber } )
+						}
+						value={ startNumber }
+					/>
+
+					<NumberControl
+						label={ __( 'End number' ) }
+						onChange={ ( newEndNumber ) =>
+							setAttributes( { endNumber: newEndNumber } )
+						}
+						value={ endNumber }
+					/>
+
+				</PanelBody>
+			</InspectorControls>
 
 			<RichText
 				identifier="content"

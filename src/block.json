@@ -21,6 +21,13 @@
 		"placeholder": {
 			"type": "string",
 			"default": "1234"
+		},
+		"startNumber": {
+			"type": "number",
+			"default": 0
+		},
+		"endNumber": {
+			"type": "number"
 		}
 	},
 	"supports": {
