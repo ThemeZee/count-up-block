@@ -23,11 +23,17 @@
       "default": "1234"
     },
     "startNumber": {
-      "type": "number",
-      "default": 0
+      "type": "string",
+      "source": "attribute",
+      "selector": "div",
+      "attribute": "data-start-number",
+      "default": "0"
     },
     "endNumber": {
-      "type": "number"
+      "type": "string",
+      "source": "attribute",
+      "selector": "div",
+      "attribute": "data-end-number"
     }
   },
   "supports": {

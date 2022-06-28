@@ -23,14 +23,18 @@ import { RichText, useBlockProps } from '@wordpress/block-editor';
  * @return {WPElement} Element to render.
  */
 export default function save( { attributes } ) {
-	const { align, content } = attributes;
+	const { textAlign, content, startNumber, endNumber } = attributes;
 	const className = classnames( {
-		[ `has-text-align-${ align }` ]: align,
+		[ `has-text-align-${ textAlign }` ]: textAlign,
 	} );
 	const blockProps = useBlockProps.save( { className } );
 
 	return (
-		<div { ...blockProps }>
+		<div
+			data-start-number={ startNumber }
+			data-end-number={ endNumber }
+			{ ...blockProps }
+		>
 			<RichText.Content value={ content } />
 		</div>
 	);

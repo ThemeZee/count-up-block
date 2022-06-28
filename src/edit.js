@@ -98,6 +98,8 @@ export default function Edit( {
 			<RichText
 				identifier="content"
 				tagName="div"
+				data-start-number={ startNumber }
+				data-end-number={ endNumber }
 				{ ...blockProps }
 				value={ content }
 				onChange={ ( newContent ) =>
