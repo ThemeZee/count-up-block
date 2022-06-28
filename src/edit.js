@@ -62,6 +62,36 @@ export default function Edit( {
 		} ),
 	} );
 
+	const onNumberChange = ( newNumber ) => {
+		let digits = content.match(/[0-9.]/g);
+		let prefix = content;
+		let suffix = '';
+
+		if( digits ) {
+			let firstNumber = digits[0];
+			let lastNumber = digits.pop();
+			prefix = content.substring( 0, content.indexOf( firstNumber ) );
+			suffix = content.substring( content.lastIndexOf( lastNumber ) + 1 );
+		}
+
+		setAttributes( {
+			endNumber: newNumber,
+			content: prefix + newNumber + suffix,
+		} )
+	};
+
+	const onlyNumbers = ( string ) => {
+		let digits = string.match(/[0-9.]/g);
+		return digits ? digits.join('') : '';
+	};
+
+	const onContentChange = ( newContent ) => {
+		setAttributes( {
+			content: newContent,
+			endNumber: onlyNumbers( newContent )
+		} )
+	};
+
 	return (
 		<>
 			<BlockControls group="block">
@@ -82,14 +112,14 @@ export default function Edit( {
 							setAttributes( { startNumber: newStartNumber } )
 						}
 						value={ startNumber }
+						step="any"
 					/>
 
 					<NumberControl
 						label={ __( 'End number' ) }
-						onChange={ ( newEndNumber ) =>
-							setAttributes( { endNumber: newEndNumber } )
-						}
+						onChange={ onNumberChange }
 						value={ endNumber }
+						step="any"
 					/>
 
 				</PanelBody>
@@ -102,9 +132,7 @@ export default function Edit( {
 				data-end-number={ endNumber }
 				{ ...blockProps }
 				value={ content }
-				onChange={ ( newContent ) =>
-					setAttributes( { content: newContent } )
-				}
+				onChange={ onContentChange }
 				onMerge={ mergeBlocks }
 				onReplace={ onReplace }
 				onRemove={ onRemove }

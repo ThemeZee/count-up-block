@@ -83,6 +83,37 @@ function Edit(_ref) {
       [`has-text-align-${textAlign}`]: textAlign
     })
   });
+
+  const onNumberChange = newNumber => {
+    let digits = content.match(/[0-9.]/g);
+    let prefix = content;
+    let suffix = '';
+
+    if (digits) {
+      let firstNumber = digits[0];
+      let lastNumber = digits.pop();
+      prefix = content.substring(0, content.indexOf(firstNumber));
+      suffix = content.substring(content.lastIndexOf(lastNumber) + 1);
+    }
+
+    setAttributes({
+      endNumber: newNumber,
+      content: prefix + newNumber + suffix
+    });
+  };
+
+  const onlyNumbers = string => {
+    let digits = string.match(/[0-9.]/g);
+    return digits ? digits.join('') : '';
+  };
+
+  const onContentChange = newContent => {
+    setAttributes({
+      content: newContent,
+      endNumber: onlyNumbers(newContent)
+    });
+  };
+
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.BlockControls, {
     group: "block"
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.AlignmentControl, {
@@ -97,13 +128,13 @@ function Edit(_ref) {
     onChange: newStartNumber => setAttributes({
       startNumber: newStartNumber
     }),
-    value: startNumber
+    value: startNumber,
+    step: "any"
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalNumberControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('End number'),
-    onChange: newEndNumber => setAttributes({
-      endNumber: newEndNumber
-    }),
-    value: endNumber
+    onChange: onNumberChange,
+    value: endNumber,
+    step: "any"
   }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.RichText, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
     identifier: "content",
     tagName: "div",
@@ -111,9 +142,7 @@ function Edit(_ref) {
     "data-end-number": endNumber
   }, blockProps, {
     value: content,
-    onChange: newContent => setAttributes({
-      content: newContent
-    }),
+    onChange: onContentChange,
     onMerge: mergeBlocks,
     onReplace: onReplace,
     onRemove: onRemove,
