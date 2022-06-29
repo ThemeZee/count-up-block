@@ -83,9 +83,11 @@ function Edit(_ref) {
       [`has-text-align-${textAlign}`]: textAlign
     })
   });
+  /* Change content when number is changed in settings */
 
-  const onNumberChange = newNumber => {
-    let digits = content.match(/[0-9.]/g);
+  const onNumberChange = value => {
+    let newNumber = onlyNumbers(value);
+    let digits = content.match(/[0-9.,]/g);
     let prefix = content;
     let suffix = '';
 
@@ -98,13 +100,31 @@ function Edit(_ref) {
 
     setAttributes({
       endNumber: newNumber,
-      content: prefix + newNumber + suffix
+      content: prefix + (newNumber ? newNumber : '') + suffix
     });
   };
+  /* Only allow digits and decimal separators */
+
 
   const onlyNumbers = string => {
-    let digits = string.match(/[0-9.]/g);
-    return digits ? digits.join('') : '';
+    const chars = string.match(/[0-9.,]/g); // Make sure only one decimal separator is allowed.
+
+    if (chars) {
+      let decimalFound = false;
+      const digits = chars.map(char => {
+        if ('.' == char || ',' == char) {
+          if (false == decimalFound) {
+            decimalFound = true;
+            return char;
+          }
+        } else {
+          return char;
+        }
+      });
+      return digits.join('');
+    }
+
+    return;
   };
 
   const onContentChange = newContent => {
@@ -123,18 +143,14 @@ function Edit(_ref) {
     })
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.InspectorControls, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.PanelBody, {
     title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Counter settings')
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalNumberControl, {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Start number'),
-    onChange: newStartNumber => setAttributes({
-      startNumber: newStartNumber
-    }),
     value: startNumber,
-    step: "any"
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.__experimentalNumberControl, {
+    onChange: onNumberChange
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_4__.TextControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('End number'),
-    onChange: onNumberChange,
     value: endNumber,
-    step: "any"
+    onChange: onNumberChange
   }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_5__.RichText, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
     identifier: "content",
     tagName: "div",

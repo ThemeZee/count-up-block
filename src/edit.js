@@ -17,8 +17,7 @@ import {
 	ToolbarDropdownMenu,
 	ToggleControl,
 	PanelBody,
-	__experimentalToolsPanelItem as ToolsPanelItem,
-	__experimentalNumberControl as NumberControl,
+	TextControl,
 } from '@wordpress/components';
 
 /**
@@ -62,8 +61,10 @@ export default function Edit( {
 		} ),
 	} );
 
-	const onNumberChange = ( newNumber ) => {
-		let digits = content.match(/[0-9.]/g);
+	/* Change content when number is changed in settings */
+	const onNumberChange = ( value ) => {
+		let newNumber = onlyNumbers(value)
+		let digits = content.match(/[0-9.,]/g);
 		let prefix = content;
 		let suffix = '';
 
@@ -76,13 +77,32 @@ export default function Edit( {
 
 		setAttributes( {
 			endNumber: newNumber,
-			content: prefix + newNumber + suffix,
+			content: prefix + ( newNumber ? newNumber : '' ) + suffix,
 		} )
 	};
 
+	/* Only allow digits and decimal separators */
 	const onlyNumbers = ( string ) => {
-		let digits = string.match(/[0-9.]/g);
-		return digits ? digits.join('') : '';
+		const chars = string.match(/[0-9.,]/g);
+
+		// Make sure only one decimal separator is allowed.
+		if ( chars ) {
+			let decimalFound = false;
+			const digits = chars.map(char => {
+				if( '.' == char || ',' == char ) {
+					if ( false == decimalFound ) {
+						decimalFound = true;
+						return char;
+					}
+				} else {
+					return char;
+				}
+			});
+
+			return digits.join('');
+		}
+
+		return;
 	};
 
 	const onContentChange = ( newContent ) => {
@@ -106,20 +126,16 @@ export default function Edit( {
 			<InspectorControls>
 				<PanelBody title={ __( 'Counter settings' ) }>
 
-					<NumberControl
+					<TextControl
 						label={ __( 'Start number' ) }
-						onChange={ ( newStartNumber ) =>
-							setAttributes( { startNumber: newStartNumber } )
-						}
 						value={ startNumber }
-						step="any"
+						onChange={ onNumberChange }
 					/>
 
-					<NumberControl
+					<TextControl
 						label={ __( 'End number' ) }
-						onChange={ onNumberChange }
 						value={ endNumber }
-						step="any"
+						onChange={ onNumberChange }
 					/>
 
 				</PanelBody>
